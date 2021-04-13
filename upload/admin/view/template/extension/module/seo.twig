@@ -1,0 +1,266 @@
+<style>
+    .lds-ring {
+        display: none;
+        position: relative;
+        top: 150px;
+        left: 50%;
+        width: 80px;
+        height: 80px;
+        z-index: 999;
+    }
+    .lds-ring div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border: 8px solid #333;
+        border-radius: 50%;
+        animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: #333 transparent transparent transparent;
+    }
+    .lds-ring div:nth-child(1) {
+        animation-delay: -0.45s;
+    }
+    .lds-ring div:nth-child(2) {
+        animation-delay: -0.3s;
+    }
+    .lds-ring div:nth-child(3) {
+        animation-delay: -0.15s;
+    }
+    @keyframes lds-ring {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary save"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+          <div class="lds-ring">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+          </div>
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="tab" href="#categories">Категории</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#products">Товары</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#articles">Статьи</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade active" id="categories">
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-categories-apply">{{ entry_apply }}</label>
+                <div class="col-sm-10">
+                  <select name="seo_categories_apply" id="input-categories-apply" class="form-control">
+                    {% if seo_categories_apply %}
+                      <option value="1" selected="selected">{{ text_to_all }}</option>
+                      <option value="0">{{ text_to_empty }}</option>
+                    {% else %}
+                      <option value="1">{{ text_to_all }}</option>
+                      <option value="0" selected="selected">{{ text_to_empty }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-categories-keywords">{{ entry_keywords }}</label>
+                <div class="col-sm-10">
+                  <textarea type="text" name="seo_categories_keywords" placeholder="{{ text_with_comma }}" id="input-categories-keywords" class="form-control" >{{ seo_categories_keywords }}</textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-categories-description">{{ entry_description }}</label>
+                <div class="col-sm-10">
+                  <textarea type="text" name="seo_categories_description" placeholder="{{ entry_description }}" id="input-categories-description" class="form-control" >{{ seo_categories_description }}</textarea>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="products">
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-products-apply">{{ entry_apply }}</label>
+                <div class="col-sm-10">
+                  <select name="seo_products_apply" id="input-products-apply" class="form-control">
+                    {% if seo_products_apply %}
+                      <option value="1" selected="selected">{{ text_to_all }}</option>
+                      <option value="0">{{ text_to_empty }}</option>
+                    {% else %}
+                      <option value="1">{{ text_to_all }}</option>
+                      <option value="0" selected="selected">{{ text_to_empty }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-products-use-more">{{ entry_use_more }}</label>
+                <div class="col-sm-10">
+                  <select name="seo_products_use_more" id="input-products-use-more" class="form-control">
+                    {% if seo_products_use_more == 0 %}
+                      <option value="0" selected="selected">{{ text_no }}</option>
+                      <option value="1">{{ text_brands }}</option>
+                      <option value="2">{{ text_cats }}</option>
+                      <option value="3">{{ text_brands_cats }}</option>
+                    {% elseif seo_products_use_more == 1 %}
+                      <option value="0">{{ text_no }}</option>
+                      <option value="1" selected="selected">{{ text_brands }}</option>
+                      <option value="2">{{ text_cats }}</option>
+                      <option value="3">{{ text_brands_cats }}</option>
+                    {% elseif seo_products_use_more == 2 %}
+                      <option value="0">{{ text_no }}</option>
+                      <option value="1">{{ text_brands }}</option>
+                      <option value="2" selected="selected">{{ text_cats }}</option>
+                      <option value="3">{{ text_brands_cats }}</option>
+                    {% else %}
+                      <option value="0">{{ text_no }}</option>
+                      <option value="1">{{ text_brands }}</option>
+                      <option value="2">{{ text_cats }}</option>
+                      <option value="3" selected="selected">{{ text_brands_cats }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-products-keywords">{{ entry_keywords }}</label>
+                <div class="col-sm-10">
+                  <textarea type="text" name="seo_products_keywords" placeholder="{{ text_with_comma }}" id="input-products-keywords" class="form-control" >{{ seo_products_keywords }}</textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-products-description">{{ entry_description }}</label>
+                <div class="col-sm-10">
+                  <textarea type="text" name="seo_products_description" placeholder="{{ entry_description }}" id="input-products-description" class="form-control" >{{ seo_products_description }}</textarea>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="articles">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-articles-apply">{{ entry_apply }}</label>
+                    <div class="col-sm-10">
+                      <select name="seo_articles_apply" id="input-articles-apply" class="form-control">
+                        {% if seo_articles_apply %}
+                          <option value="1" selected="selected">{{ text_to_all }}</option>
+                          <option value="0">{{ text_to_empty }}</option>
+                        {% else %}
+                          <option value="1">{{ text_to_all }}</option>
+                          <option value="0" selected="selected">{{ text_to_empty }}</option>
+                        {% endif %}
+                      </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-articles-divide">{{ entry_divide }}</label>
+                    <div class="col-sm-10">
+                        <select name="seo_articles_divide" id="input-articles-divide" class="form-control">
+                            {% if seo_articles_divide %}
+                                <option value="1" selected="selected">{{ text_yes }}</option>
+                                <option value="0">{{ text_no }}</option>
+                            {% else %}
+                                <option value="1">{{ text_yes }}</option>
+                                <option value="0" selected="selected">{{ text_no }}</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-articles-refresh-keyword">{{ entry_refresh_keyword }}</label>
+                    <div class="col-sm-10">
+                        <select name="seo_articles_refresh_keyword" id="input-articles-refresh-keyword" class="form-control">
+                            {% if seo_articles_refresh_keyword %}
+                                <option value="1" selected="selected">{{ text_yes }}</option>
+                                <option value="0">{{ text_no }}</option>
+                            {% else %}
+                                <option value="1">{{ text_yes }}</option>
+                                <option value="0" selected="selected">{{ text_no }}</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-articles-refresh-description">{{ entry_refresh_descr }}</label>
+                    <div class="col-sm-10">
+                        <select name="seo_articles_refresh_descr" id="input-articles-refresh-description" class="form-control">
+                            {% if seo_articles_refresh_descr %}
+                                <option value="1" selected="selected">{{ text_yes }}</option>
+                                <option value="0">{{ text_no }}</option>
+                            {% else %}
+                                <option value="1">{{ text_yes }}</option>
+                                <option value="0" selected="selected">{{ text_no }}</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="seoSaveDoneModal" tabindex="-1" role="dialog" aria-labelledby="seoSaveDoneModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Настройки успешно сохранены!
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-ok" class="btn btn-primary">Ок</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    {% if request_done %}
+        $('#seoSaveDoneModal').modal('show')
+    {% endif %}
+
+    $('#btn-ok').on('click', function () {
+        $('#seoSaveDoneModal').modal('hide')
+    })
+
+  $('.nav-link.active').click();
+  $('.btn.btn-primary.save').click(function () {
+      $('.lds-ring').css('display', 'inline');
+  });
+</script>
+{{ footer }}
